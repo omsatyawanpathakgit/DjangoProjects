@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Blog Posts - Blog Haven</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<style>
+body{
+font-family:'Roboto',sans-serif;
+background:#f8f9fa;
+margin:0;
+padding:20px;
+color:#2c3e50;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+h2{
+font-family:'Playfair Display',serif;
+text-align:center;
+color:#9b59b6;
+font-size:2.5em;
+margin-bottom:30px;
+}
+
+.search-form{
+display:flex;
+justify-content:center;
+margin-bottom:30px;
+}
+
+.search-form input{
+padding:12px 20px;
+border:2px solid #bdc3c7;
+border-radius:25px 0 0 25px;
+font-size:16px;
+width:300px;
+}
+
+.search-form button{
+padding:12px 20px;
+background:#9b59b6;
+color:white;
+border:none;
+border-radius:0 25px 25px 0;
+cursor:pointer;
+}
+
+.posts-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+}
+
+.post-card{
+background:white;
+border-radius:15px;
+padding:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.post-card:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+h3{
+font-family:'Playfair Display',serif;
+margin-bottom:10px;
+}
+
+small{
+color:#7f8c8d;
+}
+
+.actions{
+text-align:right;
+margin-top:15px;
+}
+
+.actions a{
+padding:6px 12px;
+border-radius:5px;
+text-decoration:none;
+color:white;
+margin-left:8px;
+}
+
+.edit{background:#f39c12;}
+.delete{background:#e74c3c;}
+
+.no-posts{
+text-align:center;
+font-size:18px;
+color:#7f8c8d;
+}
+
+.back-link{
+display:block;
+text-align:center;
+margin-top:30px;
+padding:10px 20px;
+background:#34495e;
+color:white;
+text-decoration:none;
+border-radius:25px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>All Blog Posts</h2>
+
+<form method="GET" class="search-form">
+<input type="text" name="q" placeholder="Search by title..." value="{{ query }}">
+<button type="submit">Search</button>
+</form>
+
+<div class="posts-grid">
+
+{% for post in posts %}
+
+<div class="post-card">
+
+<h3>{{ post.title }}</h3>
+
+<p>{{ post.content|truncatechars:150 }}</p>
+
+<small>By {{ post.author }} | {{ post.created_at }}</small>
+
+{% if user == post.author or user.is_superuser %}
+<div class="actions">
+<a href="/update/{{ post.id }}/" class="edit">Edit</a>
+<a href="/delete/{{ post.id }}/" class="delete" onclick="return confirm('Are you sure?')">Delete</a>
+</div>
+{% endif %}
+
+</div>
+
+{% empty %}
+
+<p class="no-posts">No posts found.</p>
+
+{% endfor %}
+
+</div>
+
+<a href="/" class="back-link">Back to My Posts</a>
+
+</div>
+
+</body>
+</html>
